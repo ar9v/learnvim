@@ -206,6 +206,7 @@ Hay otros movimientos que son útiles cuando queremos preservar la posición del
 En casos más heterodoxos, podemos emplear búsquedas con:
 
 - f/F busca un caracter hacia adelante/hacia atrás
+- t/T hace lo mismo, pero mueve el cursor un espacio antes ('til)
 - "/" nos permite escribir un regex para buscar
 
 # Marcas
@@ -222,6 +223,7 @@ Así como podemos prefijar movimientos, podemos prefijar comandos con movimiento
 - c} = change paragraph
 - dw = delete word
 - d\) = delete sentence
+- yw = yank word
 
 Otros comandos ya incluyen una mezcla de movimiento e inserción
 
@@ -231,8 +233,19 @@ Otros comandos ya incluyen una mezcla de movimiento e inserción
 - A = append EOL
 - S = substitute line ...
 
-Me tomaré la libertad de poner un **gran recordatorio** aquí para parar y demostrar las demás
-porque la verdad son bastantes jejejeje.
+Me tomaré la libertad de poner un **gran recordatorio** aquí para parar y demostrar las demás.
+
+# Modificadores especiales
+## dw vs daw vs diw
+- dw borra la palabra **desde el cursor hasta el inicio de la siguiente palabra**
+- daw borra la palabra **sin importar la posición del cursor**
+- diw borra la palabra **sin importar la posición del cursor hasta antes de la siguiente palabra**
+
+# Vim Golf
+## ¿dbx, bdw o daw?
+Si las tres combinaciones hacen lo mismo y requieren teclear tres veces, ¿cuál es la mejor?
+
+- **daw** porque es **un cambio**
 
 #
 \centering 
@@ -284,6 +297,7 @@ Hay muchas fuentes para consultar sobre Vim:
 ## Libros
 - "Practical Vim" de Drew Neil
 - "The Vim Tutorial and Reference" Steve Oualline
+- "Seven habits of effective text editing" de Bram Moolenaar
 
 #
 \centering
