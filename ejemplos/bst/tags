@@ -1,0 +1,35 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BST	BST.h	/^BST::BST() {$/;"	f	class:BST
+BST	BST.h	/^BST::BST(const BST &objeto) {$/;"	f	class:BST
+BST	BST.h	/^class BST {$/;"	c
+add	BST.h	/^void BST::add(int data) {$/;"	f	class:BST
+altura	BST.h	/^int BST::altura(NodeTree *r) {$/;"	f	class:BST
+ancestors	BST.h	/^void BST::ancestors(int data) {$/;"	f	class:BST
+borraTodo	BST.h	/^void BST::borraTodo(NodeTree *r) {$/;"	f	class:BST
+count	BST.h	/^int BST::count() {$/;"	f	class:BST
+cuentaNodos	BST.h	/^int BST::cuentaNodos(NodeTree *r) {$/;"	f	class:BST
+del	BST.h	/^void BST::del(int data) {$/;"	f	class:BST
+height	BST.h	/^int BST::height() {$/;"	f	class:BST
+howManyChildren	BST.h	/^int BST::howManyChildren(NodeTree *aux) {$/;"	f	class:BST
+imprimeHojas	BST.h	/^void BST::imprimeHojas(NodeTree *r) {$/;"	f	class:BST
+inorden	BST.h	/^void BST::inorden(NodeTree *r) {$/;"	f	class:BST
+maxWidth	BST.h	/^int BST::maxWidth() {$/;"	f	class:BST
+mirror	BST.h	/^void BST::mirror() {$/;"	f	class:BST
+nearestRelative	BST.h	/^int BST::nearestRelative(int numero1, int numero2) {$/;"	f	class:BST
+operator ==	BST.h	/^bool BST::operator==(const BST &objeto) {$/;"	f	class:BST
+postorden	BST.h	/^void BST::postorden(NodeTree *r) {$/;"	f	class:BST
+predecesor	BST.h	/^int BST::predecesor(NodeTree *aux) {$/;"	f	class:BST
+preorden	BST.h	/^void BST::preorden(NodeTree *r) {$/;"	f	class:BST
+preordenConstructor	BST.h	/^void BST::preordenConstructor(NodeTree *r, queue<int> &bst) {$/;"	f	class:BST
+print	BST.h	/^void BST::print(int tipo) {$/;"	f	class:BST
+printLevel	BST.h	/^void BST::printLevel() {$/;"	f	class:BST
+root	BST.h	/^        NodeTree *root;$/;"	m	class:BST
+search	BST.h	/^bool BST::search(int data) {$/;"	f	class:BST
+sucesor	BST.h	/^int BST::sucesor(NodeTree *aux) {$/;"	f	class:BST
+whatLevelamI	BST.h	/^int BST::whatLevelamI(int data) {$/;"	f	class:BST
+~BST	BST.h	/^BST::~BST() {$/;"	f	class:BST

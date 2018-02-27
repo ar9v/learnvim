@@ -1,0 +1,1413 @@
+% Copyright 2014 Jean-Philippe Eisenbarth
+% This program is free software: you can 
+% redistribute it and/or modify it under the terms of the GNU General Public 
+% License as published by the Free Software Foundation, either version 3 of the 
+% License, or (at your option) any later version.
+% This program is distributed in the hope that it will be useful,but WITHOUT ANY 
+% WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+% PARTICULAR PURPOSE. See the GNU General Public License for more details.
+% You should have received a copy of the GNU General Public License along with 
+% this program.  If not, see <http://www.gnu.org/licenses/>.
+
+% Based on the code of Yiannis Lazarides
+% http://tex.stackexchange.com/questions/42602/software-requirements-specification-with-latex
+% http://tex.stackexchange.com/users/963/yiannis-lazarides
+% Also based on the template of Karl E. Wiegers
+% http://www.se.rit.edu/~emad/teaching/slides/srs_template_sep14.pdf
+% http://karlwiegers.com
+
+% Changes to this document made by: Andres Ricardo Garza Vela
+% To conform with Software Engineering Fundamentals course
+
+\documentclass{scrreprt}
+\usepackage[export]{adjustbox}
+\usepackage{listings}
+\usepackage{underscore}
+\usepackage{tikz}
+\usepackage{tikz-uml}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\hypersetup{
+    bookmarks=false,    % show bookmarks bar?
+    pdftitle={Software Requirement Specification},    % title
+    pdfauthor={Jean-Philippe Eisenbarth},                     % author
+    pdfsubject={TeX and LaTeX},                        % subject of the document
+    pdfkeywords={TeX, LaTeX, graphics, images}, % list of keywords
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,       % color of internal links
+    citecolor=black,       % color of links to bibliography
+    filecolor=black,        % color of file links
+    urlcolor=magenta,        % color of external links
+    linktoc=page            % only page is linked
+}%
+\def\myversion{1.0}
+\date{}
+%\title{%
+
+%}
+\usepackage{hyperref}
+\usepackage{apacite}
+\usepackage{doi}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[toc]{glossaries}
+\makeglossaries
+
+\newglossaryentry{patient}
+{
+    name=patient,
+    description={A person who is under medical care or treatment. 
+                 In this case, a diabetic},
+    plural=patients
+}
+\newglossaryentry{insulin}
+{
+    name=insulin,
+    description={A polypeptide hormone produced by the pancreas
+                 that regulates the metabolism of glucose and other
+                 nutrients}
+}
+\newglossaryentry{glucose}
+{
+    name=glucose,
+    description={Also called starch syrup. A syrup containing dextrose,
+                 maltose, and dextrine; obtained by the incomplete hydrolisis
+                 of starch}
+}
+\newglossaryentry{doctor}
+{
+    name=doctor,
+    description={A person licensed to practice medicine, as a physician, surgeon, etc.
+                 In this case, an endocrinologist},
+    plural=doctors
+}
+\newglossaryentry{healthcare}
+{
+    name=health-care provider,
+    description={Any one doctor, nurse or medical staff that is able to care for a patient
+                 in any given situation},
+    plural=helath-care providers,
+}
+\newglossaryentry{ssc}
+{
+    name=Software Controlled System,
+    description={Said of the System Programs collectively}
+} 
+\newglossaryentry{diabetes}
+{
+    name=diabetes,
+    description={A disease in which the body's ability to produce or respond to the hormone insulin is impaired, resulting in the abnormal metabolism of carbohydrates and elevated levels of glucose in the blood}
+}
+\newglossaryentry{ssrs}
+{
+    name=Software Requirements Specification,
+    description={A document that completely describes all of the functions of a proposed system and the constraints under which it must operate. For example, this document}
+}
+\newglossaryentry{stakeholder}
+{
+    name=stakeholder,
+    description={End-users, managers, engineers involved in maintenance, domain experts, trade unions and, overall, the group of people that are interested in the project},
+    plural=stakeholders
+}
+\newglossaryentry{user}
+{
+    name=user,
+    description={Any person who interacts with the device or system and that has the something to gain from this interaction},
+    plural=users
+}
+\newglossaryentry{actor}
+{
+    name=actor,
+    description={Grouping of types of users under one name that is determined because of their roles. For example, being a health-care provider is a role that nurses, doctors, etc. partake in. Instead of ennumerating each
+                 one of these as a separate user, we group them under one name},
+    plural=actors
+}
+\newglossaryentry{qof}
+{
+    name=quality of life,
+    description={The measure by which one determines if their life is satisfactory. It is highly subjective.}
+}
+\newglossaryentry{configwiz}
+{
+    name=configuration wizard,
+    description={Also called setup assistant. It is a software interface that guides the user in the process of configuring his system}
+}
+\newglossaryentry{biomarkers}
+{
+    name=biomarkers,
+    description={In this case, all data that indicates the state of the patient, such as BPM and more importantly, sugar levels in blood}
+}
+\newglossaryentry{polling}
+{
+    name=polling,
+    description={A technique by which a device tests for multiple conditions in its system one by one. In this case, the insulin pump device first checks if there's insulin, then checks if the needle is assembled
+                 and so on.}
+}
+
+\begin{document}
+
+\begin{flushright}
+    \rule{16cm}{5pt}\vskip1cm
+    \begin{bfseries}
+        \Huge{SOFTWARE REQUIREMENTS\\ SPECIFICATION}\\
+        \vspace{1cm}
+        for\\
+        \vspace{1cm}
+        Insulin Pump System\\
+        \vspace{2cm}
+        \Large \textbf{Prepared by:}\\
+    \end{bfseries}
+        \Large
+            Daniela Avil\'{e}s A01021023\\
+            Fernando Garza Quintanilla A01281613\\
+            Alejandra María Torres A01281900\\
+            David Martínez Vald\'{e}s A00820087\\
+            Federico Alcerreca Treviño A01281459\\
+            Andr\'{e}s Ricardo Garza Vela A00820361\\
+        \vspace{2cm}
+        \textbf{\Large Instituto Tecnológico y de Estudios Superiores de Monterrey}\\
+        \vspace{2cm}
+        \textbf{\today}\\
+\end{flushright}
+
+\tableofcontents
+
+\chapter{Introduction (SRS)}
+
+\section{Purpose}
+The purpose of this document is to describe an insulin pump system based on the one proposed by Ian Sommerville in his book \textsl{Software Engineering}. Particularly, this document seeks to describe the 
+requirements involved in the making of said system. As such, it aims to outline all interfaces that come into play, how they are related to one another and what they do (i.e. their functions). Thusly, it is \textbf{NOT}
+a purpose of this document to explain \textbf{how} things are done, rather to explain \textbf{which} things are to be done and by whom (\glspl{actor}, parts of the system). This includes the explanation of restraints
+implicit in these actions. Lastly, inasmuch as this is based on a case study, this document has no version number (as is the case of the pump described herein).
+
+\section{Document Conventions}
+This document has some rudimentary typographical conventions that should be considered. \textbf{Bold} typography is used, as in the former section, to \textbf{emphasize}. This is mostly used for comparing and contrasting,
+reminders or things worth noting. Text in blue refers to a concept that can be found in the Glossary. This is because concepts are hyperlinks to the Glossary. \textsl{Italics} are used when dealing with latin phrases.
+They are also used to write titles, which in turn can be found in the References section. Pertaining the latter: this document's bibliography adheres to the APA standard (5th edition).
+
+It is also worth mentioning that this document has no conventions of other nature. For example, sectioning does not obey any particular hierarchy unless stated otherwise. As such, every requirement statement is to have
+its own priority. Sectioning does, however, help distinguish between different types of content. More on this in the following section. 
+
+\section{Intended Audience and Reading Suggestions}
+This document is intended to be an all-purpose reference. Therefore, its intended audience is every \gls{stakeholder}. Nevertheless, not every single \gls{stakeholder} has to read the whole document. Specific sections are
+better suited for different types of \glspl{stakeholder}. Because of this, we find it is a good idea to include a brief guide to point each \gls{stakeholder} in the right direction.
+
+\textbf{Chapter 1} is, obviously enough, mandatory reading. \textbf{Chapter 2} is akin to a bird's-eye view of the system, its actors and requirements (mostly \gls{user} requirements). As such, it may be of interest to 
+managers, marketing staff and \glspl{user}, and maybe even for developers that wish to review something quickly. \textbf{Chapter 3} is an overview of the system and its parts and their relationships. This section may be of 
+interest to developers and designers. \textbf{Chapters 4} and \textbf{5} are comprised of a more formal definition of requirements in the form of use cases. These chapters are of interest chiefly to developers and testers.
+Documentation writers may benefit from reading this too. However, we've tried to make it as accessible
+and comprehensive as possible (e.g. by using use case diagrams), so other \glspl{stakeholder} may venture in 
+to read this chapter.
+
+As stated before, there's a \textbf{Glossary} and it should be of interest to every \gls{stakeholder} inasmuch as it tries to cover as many concepts from every field involved. It is strongly recommended to check 
+it out when in doubt. Should one wish to read the document as a whole, however, they should note that the document progresses in complexity to a certain extent. That is to say that any one person could get a grasp of 
+the whole with by not skipping sections. A final note on this section: as of this draft, sections are only hyperlinked via the table of contents. We are sorry for this inconvenience.
+
+\section{Project Scope}
+The scope of this document was mentioned beforehand. This section, however, deals with the scope of the project \textsl{per se}; the project's software and it's reason for being, among other things. \Gls{diabetes} is 
+a very common condition \cite{sommerville}. More than being a common condition, it is a “demanding disease” that in being “ubiquitous”, represents a mayor challenge to manage for those that have it. The need for this 
+project stems from these characteristics: facilitating many of these activities lessens the burden for the \glspl{patient} and in turn gives them a better \gls{qof} \cite{rubin}. It follows, therefore,
+that the project's scope is the controlling by the software of the range of activities related to the management of \gls{diabetes}, namely blood \gls{glucose} level monitoring, \gls{insulin} administering and logging 
+(for \glspl{healthcare}).
+
+\chapter{Overall Description}
+
+\section{Product Perspective}
+This insulin pump system, given that it is based on Sommerville's case study, has no predecessor insofar as an insulin pump product line for this model does not exist (i.e. it is hypothetical, a case study). 
+However, it is not the first of its kind when it comes to insulin pump systems in general. For starters, the delivery of \gls{insulin} via pumps (\textsl{CSII}) is about half a century old, and what we now know as insulin pump 
+systems date back to 20 years at least \cite{madamsvi}. The latter group has, of course, diverse systems from diverse manufacturers, but it remains a fact that they share core functionalities. This insulin pump system is,
+therefore, better viewed as a part of that group. The question then arises: what sets it apart?  The answer to that question is simply a matter of asking not about the functionalities in and of themselves, but rather 
+\textbf{what} performs those functionalities and \textbf{how} that's done. The latter is out of the scope of this document, but the former isn't (Chapter 3). Suffice it to say (for the time being) that the insulin pump 
+system here described can be seen as an alternative to other systems, that those systems are programmable, and that such “programmable insulin administration [\ldots] is integrated and augmented with \gls{glucose} biosensors
+to provide real-time, data-driven glycemic control and early detection” \cite{madamsvi}.
+
+\section{Product Functions}
+The insulin pump system has roughly five states: \textbf{startup}, \textbf{reset}, \textbf{test}, \textbf{run} and \textbf{manual} \cite{sommerville}. Those states are its main functions, but each function has its own set
+of functions related to them. Hence our grouping of the system's functions in the aforementioned categories. Do note (i.e. remember; refer to \textbf{Chapter 1 section 3} to review reading suggestions) that this is a 
+high-level summary of the functions. For a more thorough read, refer to \textbf{Chapter 4}. 
+
+\begin{enumerate}
+  \item The system shall \textbf{Startup} and in doing so shall:
+    \begin{itemize}
+      \item Provide an initial \gls{configwiz} if it's the first time it's been used.
+      \item Retrieve saved data pertaining the pump's blood sugar measurements.
+      \item Perform an initial \textbf{Test}.
+    \end{itemize}
+  \item The system shall \textbf{Reset} when performing a refill and in doing so shall:
+    \begin{itemize}
+      \item Update the amount of \gls{insulin} available (i.e. the capacity).
+      \item Perform a \textbf{Test}.
+    \end{itemize}
+  \item The system shall perform periodic \textbf{Tests} and in doing so shall:  
+    \begin{itemize}
+      \item Check for:
+        \begin{itemize}
+          \item Specific hardware conditions (e.g. low battery)
+          \item Hardware malfunctions.
+          \item The presence of a needle.
+          \item The presence of an \gls{insulin} reservoir.
+          \item The presence of enough \gls{insulin} given a computed dose.
+        \end{itemize}
+      \item Produce audiovisual warning messages when the aforementioned conditions are not met.
+    \end{itemize}
+  \item The system shall \textbf{Run} automatically and in doing so shall:
+    \begin{itemize}
+      \item Compute the doses of \gls{insulin} to be administered.
+      \item Administer doses of \gls{insulin} as required.
+      \item Update the amount of \gls{insulin} left after a given administration.
+      \item Produce logs of computed doses and \gls{biomarkers} for \glspl{healthcare}.
+      \item Produce alarms for \glspl{healthcare} in serious cases.
+    \end{itemize}
+  \item The system shall have a \textbf{Manual} mode and in doing so should:
+    \begin{itemize}
+      \item Allow a \gls{user} to set a dose of \gls{insulin} to be administered. 
+      \item Inform the \gls{user} of the state of the system (i.e. manual).
+      \item Update the computed doses and amounts of \gls{insulin} left after each dose.
+    \end{itemize}
+\end{enumerate}
+
+\textbf{In all cases}, the system shall readily administer \gls{insulin} as required and it shall do so reliably.
+
+\section{User Classes and Characteristics}
+% *** STILL UNDER CONSTRUCTION ***
+There are two main types of \glspl{user} or actors of this system, and they are divided like so because of their \textsl{roles}. 
+\begin{enumerate}
+  \item \Glspl{patient} (and Family):
+    \begin{itemize}
+      \item Are either diabetics or a \gls{patient}'s family.
+      \item Are expected to be able to operate the insulin pump device.
+    \end{itemize}
+  \item \Glspl{healthcare}:
+    \begin{itemize}
+      \item Are either \glspl{doctor} or nurses.
+      \item Are expected to be Internet and e-mail literate.
+    \end{itemize}
+\end{enumerate}
+
+It behooves the \glspl{healthcare} to be able to configure the insulin pump device and obtain logs from the system. However, the main \gls{user} is the \gls{patient} and his Family, based on the \textbf{frequency of use}.
+
+\section{Operating Environment}
+The insulin pump system has two active actors and a cooperating system in the form of a smartphone application. The \glspl{patient} interface with the pump physically, whereas the \glspl{healthcare} do so 
+via the smartphone application, which receives the logs and alarms from the pump (which is itself an embedded system). The \glspl{patient}, however, will have the option to use the smartphone application as a substitute
+for the hardware interface (i.e. control the pump via smartphone instead of the buttons of the device itself).
+
+\section{User Documentation}
+Since the insulin pump system is composed of two parts with distinct functionalities and goals, we find it necessary to specify the different ways the \textsl{\glspl{user}} can learn how to use the system; according, of course
+to their specific needs. 
+
+The \gls{user} documentation that shall be readily available will be the following:
+
+\begin{enumerate}
+  \item User Manuals
+    \begin{itemize}
+      \item For the \glspl{healthcare}
+      \item For the \glspl{patient} and their families
+    \end{itemize}
+  \item In-app tutorials
+    \begin{itemize}
+      \item For \glspl{healthcare}
+      \item For the \glspl{patient} and their families.
+    \end{itemize}
+\end{enumerate}
+
+%\section{Assumptions and Dependencies}
+
+%$<$List any assumed factors (as opposed to known facts) that could affect the 
+%requirements stated in the SRS. These could include third-party or commercial 
+%components that you plan to use, issues around the development or operating 
+%environment, or constraints. The project could be affected if these assumptions 
+%are incorrect, are not shared, or change. Also identify any dependencies the 
+%project has on external factors, such as software components that you intend to 
+%reuse from another project, unless they are already documented elsewhere (for 
+%example, in the vision and scope document or the project plan).$>$
+
+\chapter{External Interfaces}
+
+%\section{User Interfaces}
+%
+%$<$Describe the logical characteristics of each interface between the software 
+%product and the users. This may include sample screen images, any GUI standards 
+%or product family style guides that are to be followed, screen layout 
+%constraints, standard buttons and functions (e.g., help) that will appear on 
+%every screen, keyboard shortcuts, error message display standards, and so on.  
+%Define the software components for which a user interface is needed. Details of 
+%the user interface design should be documented in a separate user interface 
+%specification.$>$
+
+\section{Hardware Interfaces}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=14cm,height=7cm]{hardware.png}
+  \caption{Insulin Pump Hardware Schematic (as defined by Sommerville)}
+  \label{fig:hardwareint}
+
+  \vspace{0.5cm}
+
+  \includegraphics[width=14cm,height=6cm]{hardware-software.png}
+  \caption{Hardware-Software relationships (as defined by Sommerville)}
+  \label{fig:hardware-software}
+\end{figure}
+
+When talking about hardware interfaces, we are talking about the relationships between the hardware and the software; what the software does that is related with the hardware, to be more precise.
+As we can see, the device is comprised of several elements (Figure 1). The relationship between these elements and the software lies in that the latter controls the former, as seen in Figure 2. However, there are also
+other interactions not comprised in those diagrams \cite{sommerville}. In short, Figure 2 is a diagram of software-hardware interactions for the process of computing and administering doses of \gls{insulin}. Other interactions,
+as defined by us may be as follows: the clock is also used to keep track of the dosification of \gls{insulin}, the software controls the alarm, and depending on the state of the device, the displays will be fed information by 
+the software to inform the \gls{patient}.
+
+\section{Software Interfaces}
+The insulin pump mainly connects with the online database storage linked to the \gls{user}’s account and with 
+external devices like USB’s, Computers or Smartphones. This is to offer the \gls{user} the availability to 
+get the registered data obtained by the constant examination of the insulin pump sensors. The data 
+sharing system will be uploading information daily or when the \gls{user} requires it manually. In the other 
+hand, extracting the data to an external device must be done manually and will provide transferable 
+information for the needs of the \gls{user}, for example, showing a status to the medic. 
+
+\section{Communications Interfaces}
+The Insulin pump has specific requirements that allows it to be a lifesaver. When it comes to 
+communication, the Insulin Pump messages the \gls{patient}, the \gls{doctor} and a web page so that other people 
+with the consent of both the \gls{doctor} and the \gls{patient} can see how he/she is doing. It sends daily reports 
+of how the \gls{patient} is doing and also warning messages when necessary. With a personal hotspot, the 
+insulin Pump will never run out of Wi-Fi access. For effective reasons, there is a standard way of 
+getting the communication from A to B. That means the layout of the messages are previously written and 
+the only thing that changes are the variables of numbers and levels. When you purchase an Insulin Pump, 
+the \gls{patient} must give their username and password and other generalities so it can be protected by the 
+system’s security. The only author allowed to see everything is the \gls{doctor} and the \gls{patient}. Without 
+that consent, nobody else will find out about the situation.
+
+\chapter{System Features}
+
+\section{Use Case Diagram}
+\begin{figure}[h!]
+\begin{tikzpicture}
+\begin{umlsystem}[x=-1,fill=red!10]{Insulin Pump System}
+\umlusecase[x=-3]{Power on}
+\umlusecase[x=-3, y=-2]{Power off}
+\umlusecase[x=-3, y=-4]{Shut-down alarm}
+\umlusecase[x=-3, y=-6]{Change insulin cartridge}
+\umlusecase[x=-3,y=-8]{Administer manual dose}
+\umlusecase[x=-3,y=-10]{Request S.O.S}
+\umlusecase[x=3]{Request Logs}
+\umlusecase[x=3, y=-4, width=2.5cm]{Lock device configuration}
+\umlusecase[x=3, y=-7]{Configure Device}
+\umlusecase[x=3, y=-9,width=2.5cm]{Configure Device Remotely}
+\end{umlsystem}
+
+\umlactor[x=-9,y=-5]{Patient}
+\umlactor[x=6, y=-5]{HCP}
+
+\umlassoc{Patient}{usecase-1}
+\umlassoc{Patient}{usecase-2}
+\umlassoc{Patient}{usecase-3}
+\umlassoc{Patient}{usecase-4}
+\umlassoc{Patient}{usecase-5}
+\umlassoc{Patient}{usecase-6}
+\umlassoc{HCP}{usecase-7}
+\umlassoc{HCP}{usecase-8}
+\umlassoc{HCP}{usecase-9}
+\umlassoc{HCP}{usecase-10}
+
+%\umlextend{usecase-2}{usecase-1}
+%\umlinclude{usecase-4}{usecase-1}
+%\umlinclude{usecase-5}{usecase-1}
+%\umlinclude{usecase-6}{usecase-5}
+\end{tikzpicture}
+\caption{HCP means Health-Care Provider}
+\end{figure}
+
+\clearpage
+\section{Use Cases}
+\subsection{Patient}
+\begin{enumerate}
+    \item Use Case 1: Power On
+    \item Use Case 2: Power Off
+    \item Use Case 3: Shut down alarm
+    \item Use Case 4: Manual dose administration
+    \item Use Case 5: Replace insulin cartridge
+    \item Use Case 6: Request SOS
+\end{enumerate}
+%\section{Choose Food From Database}
+%\section{Dismiss Warning}
+%\section{Transfer Data to PC}
+
+\subsection{Health-Care Provider}
+\begin{enumerate}
+    \item Use Case 7: Request Logs
+    \item Use Case 8: Lock device configuration
+    \item Use Case 9: Configure Device
+    \item Use Case 10: Configure Device Remotely
+\end{enumerate}
+
+There are, of course, many use cases not listed here. These are some that we thought were useful to emphasize the importance of other principles we wish to cover in the Design Specification; particularly, the use of 
+a smartphone app as a means of controlling the system. A comprehensive list could very well exceed the scope of the semester and even a school year's worth in time. 
+
+Although writing out Use Cases represents a means to communicate requirements, we have decided to include that in the Design Specification, so that the reader can
+more easily identify the relationship between the Design decisions, the components of the system and the lo-fi prototypes.
+
+\chapter{Other Nonfunctional Requirements}
+
+\section{Performance Requirements}
+\begin{enumerate}
+  \item Sensors and dispensers must work constantly, without presenting any delays or decrementing their
+    level of preciseness because if it were to malfunction, it would present a risk to the health of the
+    \gls{user}. They must be able to identify the sugar levels in the blood and the dispensers must administer
+    the correct \gls{insulin} doses. 
+  \item The battery must be able to last for a long time. Additionally, it must be able to withstand
+    many recharges without malfunctions in the future, since the decreasing lifespan of the battery 
+    could result in a system failure that can put the \gls{user} at risk.
+  \item The alarm system must be able to detect a system failure and activate according to the type of
+    problem that is ocurring in the system. It must also emit a perceptible sound to let the \gls{user} know
+    that there is a problem.
+  \item The insulin pump system shall perform tests every thirty seconds. Additionally, it should allow 
+    a \gls{user}, when in \textbf{manual mode}, to adjust the dose to be administered within a five second
+    timeframe.
+
+\end{enumerate}
+
+\section{Safety Requirements}
+Possible problems in the form of damages or losses are the following: 
+\begin{enumerate}
+  \item An \gls{insulin} overdose or underdose.
+  \item Power failure.
+  \item An infection or allergic reaction.
+\end{enumerate}
+
+To avoid the previous problems, safeguards must be established for the well being of the \gls{user}. An alarm
+shall sound whenever there is a system failure (this includes power failure) or a change in the user's
+condition.
+
+The following are other actions that actors shall partake in to prevent these problems:
+\begin{enumerate}
+  \item Prioritize product maintenance. 
+  \item Have regular meetings with \glspl{healthcare}.
+  \item Regulate battery use.
+  \item Do not be negligent when charging (e.g. charging longer than necessary) 
+\end{enumerate}
+
+\section{Security Requirements}
+The data in the product contains personal medical information about the \gls{patient}'s health, so the 
+information that the product contains must only be available for the \gls{user} and his \gls{healthcare}.
+The transfer of information will be done manually by the user and, in the case of logs, automatically
+by following settings modified by the user beforehand.
+
+\section{Software Quality Attributes}
+\begin{enumerate}
+  \item The system is easily usable and maintainable, so that it can be used constantly.
+  \item The battery of the insulin pump can withstand recharging, without losing its capacity for 
+    storage, making it reusable.
+  \item The product is very comfortable to use and is highly portable when not in use.
+  \item The \gls{user} can rely on the sensors to correctly identify the sugar levels in his blood and the
+    dispenser to administer the correct \gls{insulin} dose according to these readings.
+\end{enumerate}
+
+\section{Business Rules}
+\begin{enumerate}
+  \item In case of system failure, the family members have the prerrogative to contact the health-care 
+    providers. This implies that the system's application must account for the family members (i.e.
+    allow a \gls{user} account and a third party account with certain restrictions).
+    immediately.
+  \item \Glspl{healthcare} have the prerrogative to request more information should abnormal activity
+    arise or should the \gls{user} be impaired. This implies that the application must have means for the
+    \gls{doctor} to access information during an emergency.
+  \item \Glspl{healthcare} that are not the \gls{patient}'s \gls{doctor} can have access to information should 
+    the need arise.
+  \item Users can ask for system maintenance or battery replacements as they see fit. This can be done
+    by the \glspl{healthcare} likewise.
+\end{enumerate}
+
+% REFERENCE TO DO
+% Include IEEE reference
+% Include template reference
+
+\clearpage
+\begin{flushright}
+    \rule{16cm}{5pt}\vskip1cm
+    \begin{bfseries}
+        \Huge{SOFTWARE DESIGN\\ SPECIFICATION}\\
+        \vspace{1cm}
+        for\\
+        \vspace{1cm}
+        Insulin Pump System\\
+        \vspace{2cm}
+        \Large \textbf{Prepared by:}\\
+    \end{bfseries}
+        \Large
+            Daniela Avil\'{e}s A01021023\\
+            Fernando Garza Quintanilla A01281613\\
+            Alejandra María Torres A01281900\\
+            David Martínez Vald\'{e}s A00820087\\
+            Federico Alcerreca Treviño A01281459\\
+            Andr\'{e}s Ricardo Garza Vela A00820361\\
+        \vspace{2cm}
+        \textbf{\Large Instituto Tecnológico y de Estudios Superiores de Monterrey}\\
+        \vspace{2cm}
+        \textbf{\today}\\
+\end{flushright}
+
+\chapter{Introduction (SDS)}
+\section{Purpose}
+The following document outlines the design of an Insulin Pump System according to the Software Requirements Specification Document produced for this course. It is comprised of five chapters (including this chapter):
+\textbf{Introduction}, \textbf{Architectural Design}, \textbf{System Components}, \textbf{Use Case Design}, and \textbf{Data Structures}. Unlike the Software Requirements Specification Document, which is intended for a
+large audience, the Software Design Specification is meant to be read by designers (as future reference; to perform refactoring) and by developers (to understand what is expected of them and how to go about 
+implementing features). Nevertheless, it follows the same document conventions.\\
+
+\section{Document Overview}
+\textbf{Architectural Design} is an overview of the Insulin Pump System. It is comprised of two diagrams and an explanation of each of them. The first one is a \textsl{Deployment Diagram}.It is meant to give the reader an 
+idea or intuition of how the system is divided and how each division contributes to the whole. The second diagram is a component diagram. It is meant to be used as a more thorough explanation of the relationships 
+established in the first diagram, as well as the parts that comprise these divisions.\\
+
+\textbf{System Components} is the the listing of the aforementioned diagram with every component (both software and hardware components). The point of this listing is to “unveil” what in the diagram appears to be a series 
+of black boxes and relate them to specific Use Cases. This is so that the developer is able to understand which components are involved with which Use Cases and what are 
+their properties (e.g. interfaces, design description). Because we'll have the component listing to relate components and interfaces to Use Cases, we have found we should omit \textsl{Sequence Diagrasm}.\\
+
+\textbf{Use Case Design} deals with algorithms in the form of \textsl{Activity Diagrams}. Since necessary component properties surface during the development of these diagrams, we have also found we should omit 
+Class Diagrams (or at least include them as necessary in the \textsl{Activity Diagrams} as per UML specifications). Additionally, this chapter contains low-fidelity prototypes (GUI design). This chapter is basically the 
+translation of Use Cases into design alternatives.\\
+
+Lastly, \textbf{Data Structures} talks about the way data is manipulated and stored in the Insulin Pump System. This includes dealing with the logs produced by insulin administration, configuration files and the way 
+computed values are stored in memory and accessed. In the terms stipulated by our diagrams, this chapter deals with \textsl{UML artifacts}, how their information is manipulated and how they are transferred between
+devices. Consequently, this part also touches upon our database's core design.\\
+
+As previously stated, this is a document for developers and designers. That is to say that it assumes the reader has knowledge of UML diagrams mentioned. It also assumes that the reader knows about control flow 
+diagrams and is familiarized with technical terms related to the implementation of the ideas contained herein.
+
+\chapter{Architectural Design}
+\section{Deployment Diagram}
+\begin{figure}[h!]
+    \centering
+    \includegraphics{plantuml/deployment.png}
+    \caption{Deployment Diagram}
+    \label{fig:deploy}
+\end{figure}
+
+\clearpage
+We have chosen the Deployment Diagram as our first means to outline the project inasmuch as it provides a comprehensive bird-eye view of the elements that are required for the system. This has two purposes: the first one
+is that it is an abstraction of the elements of the system and as such, it imposes no particular structure nor names which components should be used (for example, a database can be done via mySQL, Access or Apache). This
+holds true for every part of the system. The second purpose it serves is that of allowing us to express our ideas to less technically-oriented stakeholders. Let us recall that this is a hypothetical exercise from the start
+and as such, the authors have near to zero experience with certain elements and topics required to further develop the project such as databases and networking. The Deployment Diagram allows us to provide a layout without
+necessarily having to know implementation details. 
+
+\section{Component Diagram}
+\begin{figure}[h!]
+    \raggedright
+    \includegraphics[width=\textwidth]{plantuml/component.png}
+    \caption{Component Diagram}
+    \label{fig:component}
+\end{figure}
+
+\newpage
+On the other hand, we also decided to include a Component Diagram for the most important part of the system: the Insulin Pump Device. This is because, firstly (and most trivially), this is the part over which we exert
+greater control in virtue of our current knowledge. Furthermore, it constitutes the most original part of the project; the part that has the most elements that will have to be done from scratch (or at least the elements
+with which the developers have greater freedom). Lastly, the component diagram illustrates the logical aspects of our system, illustrates some key design principles and most importantly, it provides a logical grouping 
+for the Use Cases mentioned in the SRS.   
+
+As shown in the figure, the Component Diagram also allows us to group Hardware and Software elements into “logical bundles”. For example, the \textbf{Insulin Administrator} component surely involves the CPU and ALU of 
+the device, but that is not the main concern of the developer, but rather how to implement software able to compute and administer doses. As per UML 2.5 specifications, Nodes are only used in cases where we have devices 
+and we treat them as “black boxes”. It is important to recall that the scope of this document includes Use Cases stipulated in the SRS only (and this trend shall be kept in the following document). 
+
+\chapter{System Components}
+As can be seen in the figure, there are several elements. We intend to explain their meaning in this section. The first section of this chapter focuses on grouping these elements as per their UML meaning. The second 
+section intends to group them per Use Case. This last grouping can be seen, as has already been stated, as a condensed version of a Sequence Diagram. Pairing this section with the following chapter's Activity Diagrams 
+will yield, we consider, a comprehensive implementation plan without any particular restrictions on the specifics of processes.
+
+\section{Element Listing}
+\subsection{Actors}
+\begin{enumerate}
+    \item \textbf{User:} The diagram only has one actor, labeled \textbf{User}. This is noteworthy: the diagram may be interpreted as having the \textbf{Patient} or the \textbf{Health-Care Provider} be the user.
+\end{enumerate}
+\subsection{Nodes}
+\begin{enumerate}
+    \item \textbf{Smartphone:} Concretely, the smartphone by which the system is controlled/accessed. Nodes in UML specification not only encompass the physical device, but also the workings related to the system at hand.
+        Therefore, this Node also represents the application.
+    \item \textbf{Sensors:} This Node represents the whole hardware schematic as represented in Chapter 3 of the SRS (page 9). 
+\end{enumerate}
+\subsection{Database}
+\begin{enumerate}
+    \item \textbf{Database:} This is the database by which the config files and log files are stored and transferred between devices in the system.
+\end{enumerate}
+\subsection{Packages}
+\begin{enumerate}
+    \item \textbf{Insulin\_Pump:} Packages in the UML specification are used to group Elements that have things in common. As such, we thought it was natural that we group the hardware and software components that are
+        part of the Insulin Pump Device itself. This is the centerpiece of the system and it helps us express which components are to be treated as external pieces. The reader should recall the comments in the last 
+        chapter pertaining the difference between Databases and Components. Elements in this package are non-generic, or at least have the freedom to be that way. 
+\end{enumerate}
+\subsection{Artifacts}
+\begin{enumerate}
+    \item \textbf{config\_files:} This artifact is a text file that contains a series of commands with configuration details. This is one of the key design principles of the pump. It is specified as an artifact so that
+        the developer has total freedom of implementing a parser depending on specific goals. So, the artifact may be a JSON textfile, a init-style textfile, BATCH-like textfile and so on.
+    \item \textbf{log\_files:} This artifact is a text file that contains the data registered by the sensors and the Insulin Administrator. It follows the same design principle stated above: it is to be parsed and that
+        information is to be used to perform computations to perform the administrations.
+\end{enumerate}
+
+A key point in this implementation is that text files are lighter and the command-like nature of them can really produce highly specialized functions from a clean and clear source of information.
+
+\subsection{Components}
+\begin{enumerate}
+    \item \textbf{Power Manager:} This component comprises the logical unit that manages the battery power and the logical decisions attached to it. It is the backbone of the \textbf{Test} state, inasmuch as it polls
+        to determine if operations can be carried out.
+    \item \textbf{Display:} This component comprises all of the logic behind displays in the smartphone application and the Insulin Pump Device. 
+    \item \textbf{Insulin Administrator:} This component comprises the CPU or ALU of the Insulin Pump Device and manages the information gathered by the hardware such as sensors and the displays (smartphone) or buttons
+        (device). It computes the insulin doses and is in charge of reading and writing to the logs and managing the device's state.
+\end{enumerate}
+
+\subsection{Interfaces}
+\begin{enumerate}
+    \item \textbf{configInterface:} This is thought of as the aforementioned parser, but it can really be any means the developer has to communicate a set of rules to the Insulin Administrator component.
+    \item \textbf{logInterface:} Likewise, this is thought of as a parser, but can be any means of providing a read/write interface so that the Insulin Administrator component can make computations and so that the Display
+        component can properly output data in a readable fashion.
+    \item \textbf{sensorInterface:} This is a logic unit that has control over the sensor input. It is basically the logic that determines the digital ranges of the analog input. As such it is equally important to the
+        other interfaces. It is of essence that the developer can implement a sensible interface.
+    \item \textbf{GUI:} It is the bridge between the Display Logic and the User. The reader should remember that components are not only physical entities, but also logical entities. That's the reason behind this 
+        distinction.
+\end{enumerate}
+
+\section{Elements per Use Case}
+
+\subsection{Power On}
+\begin{enumerate}
+    \item Power Manager  
+    \item Display
+        \begin{enumerate}
+            \item GUI
+        \end{enumerate}
+\end{enumerate}
+
+\subsection{Power Off}
+\begin{enumerate}
+    \item Power Manager 
+\end{enumerate}
+
+\subsection{Shut Down Alarm}
+\begin{enumerate}
+    \item Power Manager 
+    \item Insulin Administrator
+        \begin{enumerate}
+            \item Smartphone
+            \item config\_files
+            \item log\_files
+        \end{enumerate}
+\end{enumerate}
+
+\subsection{Manual Dose Administration}
+\begin{enumerate}
+    \item Insulin Administrator
+        \begin{enumerate}
+            \item config\_files
+            \item log\_files
+            \item Database
+        \end{enumerate}
+    \item Power Manager
+    \item Display
+        \begin{enumerate}
+            \item Smartphone
+        \end{enumerate}
+\end{enumerate}
+
+\subsection{Replace Insulin Cartridge}
+\begin{enumerate}
+    \item Insulin Administrator 
+        \begin{enumerate}
+            \item config\_files
+            \item log\_files
+            \item Database
+        \end{enumerate}
+    \item Power Manager
+\end{enumerate}
+
+\subsection{Request SOS}
+\begin{enumerate}
+    \item Display 
+        \begin{enumerate}
+            \item Database 
+        \end{enumerate}
+    \item Power Manager
+\end{enumerate}
+
+\subsection{Request Logs}
+\begin{enumerate}
+    \item Display 
+    \item Power Manager
+\end{enumerate}
+
+\subsection{Lock Device Configuration}
+\begin{enumerate}
+    \item Display 
+    \item Insulin Administrator
+\end{enumerate}
+
+\subsection{Configure Device}
+\begin{enumerate}
+    \item Display 
+        \begin{enumerate}
+            \item config\_files
+            \item log\_files
+        \end{enumerate}
+\end{enumerate}
+
+\subsection{Configure Device Remotely}
+\begin{enumerate}
+    \item Display 
+            \item config\_files
+            \item log\_files
+\end{enumerate}
+
+\chapter{Use Case Design}
+This chapter covers the blueprint of the implementation itself. It is divided by Use Cases, and each Use Case is itself divided into three parts: The list of steps, an Activity Diagram and its corresponding lo-fi 
+prototype. We have found that the listing in the last chapter is a good guide to decide how to connect components and their interfaces or devices without having to dole out Sequence Diagrams. Likewise, we have found that
+Activity Diagrams portray a good enough representation of the algorithms required of a developer without being imposing. Lastly, the lo-fi GUI prototypes give an idea of what is expected design-wise of a developer.  
+The reader should remember that the point of the project is improving \textsl{quality of life} and as such, any interfaces the system has with the actor must be crystal clear.
+
+\section{Power On}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        The user grabs the insulin pump, attaches it to their body and turns or "powers" on the device.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The user presses the Power On button.
+        \item \textbf{Precondition:} The user owns the device and has attatched it to him or herself. Blood sugar is assumed to be “OK”. The device is charged.
+        \item \textbf{Postcondition:} The device is turned on and running on the “TEST” state. 
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item The user presses the Power On Button.
+        \item The system runs the STARTUP sequence.
+        \item Startup sequence does not affect the cumulative dose (it's only reset to 0 at mid-night).  This way the dose is not affected by the user switching the device on and off.
+        \item The device runs a TEST (which then runs every 30) like hardware polling. It checks:
+            \begin{enumerate}
+                \item Needle
+                \item Battery
+                \item Pump
+                \item Sensor
+                \item Delivery
+            \end{enumerate}
+        \item The system displays the main menu.
+    \end{enumerate}
+
+\section{Power Off}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        The user no longer needs to use the device for the time being, so they turn it off. The system must run appropriate polls to determine if it is safe to power off and it sends a signal to the HCP.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The user wants to remove the device and presses the power button.
+        \item \textbf{Precondition:} The device is already powered on and running normally. There are no hazardous states in the system that prevent turning off.
+        \item \textbf{Postcondition:} The device is no longer on.
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item The Patient chooses the power off option (or presses the power button on the device).
+        \item The system performs all reads and TESTS the hardware.
+        \item The system stores the data from the readings into history.
+        \item The power is cut off from the system and it shuts down.
+        \item Cumulative dose is not affected by the system shutting down. It only resets at midnight.
+    \end{enumerate}
+    \subsubsection{Alternate Path}
+        If there's no power remaining, the system shutts off automatically.
+    \subsubsection{Exception Path}
+         If a hazard is detected, an alarm is active or a dose is currently being administered, the power off operation will not be successful.
+
+\section{Shut Down Alarm}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        An alarm is set and activated when the insulin cartridge is low or when there is an error within the system, and once the user hears the alarm, they want to solve the problem and shut down the alarm.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} There is something that needs attention and an alarm sounds. The user presses the button to shut down an ongoing alarm. 
+        \item \textbf{Precondition:} There is an alarm sounding. The Patient assumes responsibility of turning off the alarm. The problems (minor) have been solved.
+        \item \textbf{Postcondition:} The alarm is turned off.
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item The button is pressed.
+        \item The data of the alarm and hazard (i.e. the reason the alarm was triggered) is recorded).
+        \item The alarm is shut down and becomes inactive.
+        \item If the condition for the alarm is still met in the next TEST (reading and hardware polling), the alarm will activate again.
+    \end{enumerate}
+    \subsubsection{Alternate Path}
+        If an alarm is active and the battery runs out of power, the alarm will be shut down as well as the device. Using the SOS button that calls for help during an active alarm will also shut the alarm down. If there
+        is a minor problem and it is solved, the alarm will cease.
+    \subsubsection{Exception Path}
+        If the hazard is severe, and the condition for the alarm to activate is still met, the alarm will not be shut down.
+
+\section{Replace Insulin Cartridge}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        The Patient wants to refill or change the insulin reservoir. In doing so, log\_files are updated and the Insulin Administrator is suspended. The system is in the \textbf{RESET} state.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The current insulin cartridge is removed by the user or it is depleted.
+        \item \textbf{Precondition:} Blood sugar levels are assumed to be “OK”. The user owns a new cartridge. Polling shows safe results.
+        \item \textbf{Postcondition:} Configuration and log files are updated and the insluin dose is initialized again to reflect the new amount of insulin available. 
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item The system recognizes the current insulin reservoir isn't present.
+        \item The system recognizes a new insulin reservoir.
+        \item The system resets the insulin level to OK and sets it to the capacity of the current insulin reservoir.
+        \item The system goes back to TEST and performs hardware polling and readings.
+    \end{enumerate}
+    \subsubsection{Alternate Path}
+        The insulin reservoir may be changed if, for some reason, the device is off.
+    \subsubsection{Exception Path}
+        If a dose is being actively administered, the reservoir cannot be removed and replaced.
+
+\section{Manual Dose Administration}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        The user turns on Manual mode and selects a dose to be administered.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The Patient decides to administer insulin manually. The Manual mode is selected (or the power switch is placed on Manual on the device).
+        \item \textbf{Precondition:} The device configuration is not locked. Polling does not return hazardous states. 
+        \item \textbf{Postcondition:} Insulin is administered to the Patient according to the prompted amount.
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item The user decides to choose an insulin dose manually.
+        \item The user turns Manual mode on.
+        \item The user presses the dose administration button to set the amount of insulin to be administered.
+        \item The system waits five seconds to read another button press.
+        \item Once fiveve seconds have passed, the insulin dose is set.
+        \item The dose is administered.
+    \end{enumerate}
+    \subsubsection{Alternate Path}
+        Insulin prompted exceeds the boundaries set by the HCP.  
+    \subsubsection{Exception Path}
+        Device configuration is locked by the HCP. 
+
+\section{Request SOS}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+    When the user encounters a problem either with his/her device or his/her health that cannot be solved by the user or the device itself and requires immediate medical attention, the user has the option to call for 
+    medical help with the “request SOS” button. If the user cannot manually push on the button, the alarm that has been set with the problem will continue on, and after a certain time of the alarm being activated the 
+    request SOS will be done automatically.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The Patient is in critical condition. The Patient or a family member selects Request SOS option.
+        \item \textbf{Precondition:} The logs report critical condition. The device is connected to Internet. 
+        \item \textbf{Postcondition:} A message is sent to the HCP or the HCP's institution and the nearest HCP. 
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item The Patient or family member chooses “Request SOS”. 
+        \item The System displays a list of HCP's nearby.
+        \item The Patient or family member chooses the desired HCP's 
+        \item The system displays a confirmation message.
+    \end{enumerate}
+    \subsubsection{Alternate Path}
+        The device is not connected to the Internet, so calling is used. There's only one HCP available or configuration files stipulate that a predetermined HCP is chosen, so it skips step 2.
+    \subsubsection{Exception Path}
+        No HCP provider is nearby; public health providers are alarmed. 
+
+\section{Request Logs}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        Either the patient or the doctor wants to see the Insulin Dose Logs for reference as to what the progression of the dose should be.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The last dose was either too small or too big and needs to be supervised as to make appropriate changes OR the HCP is doing a checkup (sensitive patient).
+        \item \textbf{Precondition:} Pump is powered “ON”.
+        \item \textbf{Postcondition:} The screen will be displaying the insulin dose log.
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item Press the “My Profile” on screen Button
+        \item Press the “Insulin Log” Button
+        \item Select the Date and or Time search filters as best suits your necessity.
+        \item Press “Display Log” Button
+    \end{enumerate}
+    \subsubsection{Alternate Path}
+        The system may not have been used before and therefore there’s nothing on the insulin log to display and therefore an error alarm could occur.
+    \subsubsection{Exception Path}
+        The device may be administering higher or lower dose than what the automatic control should allow, in this case maintenance of the equipment is required immediately as to ensure the safety of the patient, use of 
+        the pump is not recommended in this state.
+
+\section{Lock Device Configuration}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        The doctor sets a lock on certain parameters (or even lock everything) which will block the user from further changes in that parameter.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The doctor configures device remotely and sets a lock device configuration.
+        \item \textbf{Precondition:} Pump is powered “ON”, the doctor is configuring device remotely.
+        \item \textbf{Postcondition:} The parameters lock remotely by the doctor are now unavailable for changes by the patient’s manual configuration.
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item Press Lock Device Configuration Button
+        \item Modify configuration as needed
+        \item Press the “lock” button at the right of the parameter to lock
+        \item Press “Save Changes” to save and exit.
+    \end{enumerate}
+    \subsubsection{Alternate Path}
+        The device may be shut off or has run out of battery and the changes to configuration will be applied and updated the next time the system is powered “ON”.
+    \subsubsection{Exception Path}
+        If a dose is outside safe ranges, which could endanger the patient’s health the lock will not apply and the parameter config will be reset to default.
+
+\section{Configure Device}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        When the user wants to edit information available for him/her to manipulate the user will press the “Configure Device” button and all their information will be shown but only the available to manipulate will be 
+        editable. Then, all the changes will be sent to the doctor that remotely can review absolutely everything.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The device is turned on for the first time. The user wishes to change device configurations by choosing the Configure Device option in the smartphone app or the device. 
+        \item \textbf{Precondition:} It is the first time the device has been used. The configuration is not locked by the Health Care Provider.
+        \item \textbf{Postcondition:} The config\_file artifact is updated with the new information and the Insulin Administrator component acts upon these changes.
+    \end{enumerate}
+    \subsubsection{Path}
+        \begin{enumerate}
+            \item The HCP turns on the Insulin Pump Device for the first time.
+            \item The system displays the configuration wizard.  
+            \item The HCP navigates through the configuration wizard, establishing basic default parameters (blood sugar ranges, insulin doses, etc.) 
+            \item The system asks if the Device Configuration will be locked. 
+            \item The HCP establishes permissions and concludes the configuration wizard.
+        \end{enumerate}
+    \subsubsection{Alternate Path}
+        \begin{enumerate}
+            \item The Patient or the HCP selects the Configure Device option in the Patient's smartphone app or the device (the HCP's smartphone usage is reserved for the next Use Case). 
+            \item The system displays the different configuration parameters (Blood Sugar boundaries, default insulin dose, time between doses, etc.)   
+            \item The Patient modifies the parameters.
+            \item The system asks for confirmation.
+            \item The Patient confirms changes.
+        \end{enumerate}
+    \subsubsection{Exception Path}
+        The Device Configuration is locked.
+
+\section{Configure Device Remotely}
+\subsection{Steps}
+    \subsubsection{Brief Description}
+        When the HCP wants to edit information available for him/her to manipulate the HCP will press the “Configure Device Remotely” button and then select the patient he/she wants to edit. All of their information will 
+        be shown but only the available to manipulate will be editable. Then, all the changes will be sent to the patient that will be able to review changes the doctor has marked as available for patient.
+    \subsubsection{Stimulus/Response}
+    \begin{enumerate}
+        \item \textbf{Trigger:} The HCP has a Patient that displays a more delicate state of the illness, thus needing special attention. The HCP has spotted that the patient's condition has changed according to the logs
+            and must adjust accordingly.
+        \item \textbf{Precondition:} The Patient whose configuration the HCP wants to edit exists. The HCP is connected to the Internet.
+        \item \textbf{Postcondition:} The configuration files (config\_files) were edited.
+    \end{enumerate}
+    \subsubsection{Path}
+    \begin{enumerate}
+        \item The HCP chooses the “Configure Device Remotely” option in his smartphone app. 
+        \item The system displays a series of options concerning configuration of the Insulin Pump Device.
+        \item The HCP modifies these options (insulin doses, time between doses, blood sugar ranges, etc.)
+        \item The HCP chooses “Apply Changes”.
+        \item The system displays a confirmation message.
+    \end{enumerate}
+    \subsubsection{Alternate Path}
+    \begin{enumerate}
+        \item The HCP is not connected to the Internet.
+        \item The HCP chooses to restore defaults.
+        \item The HCP cancels (does not modify anything).
+    \end{enumerate}
+    \subsubsection{Exception Path}
+        One device (either the HCP's smartphone or the User's devices) is not turned on. The information must be stored in the database and a high priority query is to be issued.
+\subsection{Activity Diagram}
+
+\section{Activity Diagrams}
+% Power On X
+% Power Off 
+% Shut Down Alarm X
+% Manual Dose Administration X
+% Replace Insulin Cartridge X
+% Request SOS 
+% Request Logs X
+% Lock Device Configuration X
+% Configure Device X
+% Configure Device Remotely X
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{actPowerOn.jpeg}
+    \caption{Power On}
+    \label{fig:poweron}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{actShutDownAlarm.jpeg}
+    \caption{Shut Down Alarm}
+    \label{fig:shutdown}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{actManual.jpeg}
+    \caption{Manual Dose Administration}
+    \label{fig:manual}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{actReplace.jpeg}
+    \caption{Replace Insulin Cartridge}
+    \label{fig:replace}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{actRequest.jpeg}
+    \caption{Request Logs}
+    \label{fig:request}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{actLock.jpeg}
+    \caption{Lock Device Configuration}
+    \label{fig:lock}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{actConfigure.jpeg}
+    \caption{Configure Device}
+    \label{fig:configure}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{actConfigureRemotely.jpeg}
+    \caption{Configure Device Remotely}
+    \label{fig:remotely}
+\end{figure}
+
+\clearpage
+\section{GUI Screenshots (Prototype)}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI1.jpg}
+    \label{fig:gui1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI2.jpg}
+    \label{fig:gui2}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=8cm, height=12cm]{GUI3.jpg}
+    \label{fig:gui3}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI4.jpg}
+    \label{fig:gui4}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI5.jpg}
+    \label{fig:gui5}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI6.jpg}
+    \label{fig:gui6}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI7.jpg}
+    \label{fig:gui7}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI8.jpg}
+    \label{fig:gui8}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI9.jpg}
+    \label{fig:gui9}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{GUI10.jpg}
+    \label{fig:gui10}
+\end{figure}
+
+\chapter{Data Structures}
+As can be construed from the previous chapters, the system deals with a host of data types. While it is true that the system has its own internal storage, it is also true that for the most part, it parses files, and 
+as such, internal data structures are wholly primitive. This makes sense, considering that the guts of the device are essentially an embedded system.
+
+Nevertheless, we must consider the external data structure: the database. This is an essential part of the system because it is the backbone of the communication between HCP and Patient. In this chapter, we provide
+a diagram, that also serves the purpose of informing the developer of the data types that will need to be dealt with.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{database.jpg}
+    \caption{Database}
+    \label{fig:database}
+\end{figure}
+
+As can be seen, the database also explains the prerrogatives of the actors in the system (i.e. permissions). 
+
+\clearpage
+\begin{flushright}
+    \rule{16cm}{5pt}\vskip1cm
+    \begin{bfseries}
+        \Huge{SOFTWARE TESTING\\ SPECIFICATION}\\
+        \vspace{1cm}
+        for\\
+        \vspace{1cm}
+        Insulin Pump System\\
+        \vspace{2cm}
+        \Large \textbf{Prepared by:}\\
+    \end{bfseries}
+        \Large
+            Daniela Avil\'{e}s A01021023\\
+            Fernando Garza Quintanilla A01281613\\
+            Alejandra María Torres A01281900\\
+            David Martínez Vald\'{e}s A00820087\\
+            Federico Alcerreca Treviño A01281459\\
+            Andr\'{e}s Ricardo Garza Vela A00820361\\
+        \vspace{2cm}
+        \textbf{\Large Instituto Tecnológico y de Estudios Superiores de Monterrey}\\
+        \vspace{2cm}
+        \textbf{\today}\\
+\end{flushright}
+
+\chapter{Introduction (STS)}
+\section{Proyect Description}
+This proyect is for the development of an Insulin Pump System as specified by Ian Sommmerville (Check references), with a few modifications that go in accordance to some design principles we conceived on our own. It
+is comprised of an Insulin Pump Device, a Smartphone and a Database, that are connected by Wi-Fi and Bluetooth.
+
+\section{Scope}
+The tester should be aware that this document only covers the testing of the Use Cases specified in the SRS of this very same proyect. This is due to reasons specified beforehand, such as the authors' inexperience, 
+and a research focus on the aspect of \textsl{quality of life}. As such, the tester should know that it is, of course, of utmost importance that the Insulin Pump System's components work correctly on their own and in
+tandem to fulfill the fundamental requirements (the timely and consistent administration of insulin) but also that the components are primed to work with whatever external components are chosen to fulfill the connection
+of Smartphone and Insulin Pump Device. In brief, this document covers Use Cases that are concerned with such aspects and as such, the tester should know that there are a plethora of POV's contained herein.
+
+Firstly, there's a unit testing focus inasmuch as the components should work correctly on their own. Furthermore, the proyect should be inspected every step of the way, making sure that things work in the following 
+order: component to interfaces, interfaces to components and artifacts, components to package level, and finally from the package level to the database and node (i.e. the smartphone) level.
+
+
+\chapter{Context}
+The elements that will be tested are part of each component needed in every use case, these are the ones related to all the parts needed to make the insulin pump work, to have a secure and strong connection between the 
+pump and the mobile device (the smartphone), and to have a better user experience. The elements that will be excluded are some basic functions that are not included in the use cases because they have been taken as 
+supposed for the normal functionality of the device. The test will be based basically in the hardware components, the software logic, and the interfaces of the mobile device to ensure the objective of having an improved 
+experience for the user.
+
+\section{Tested Elements}
+\begin{enumerate}
+    \item Sensors
+    \item Alarm
+    \item Hardware elements
+    \item Software elements
+    \item Battery
+    \item Insulin dose
+    \item Main function page
+    \item Configuration
+    \item Program
+    \item Request SOS
+    \item Information Security
+\end{enumerate}
+
+\section{Assumptions and Restrictions}
+\subsection{Assumptions}
+\begin{enumerate}
+    \item We assume that the person that will make the tests has a database of the patient and the doctor.
+    \item To make the tests, the tester has to assume the roles of the patient and the HCP Each one of them must have their own created usernames and passwords. And with that, the tester must do his or her job.
+    \item The tester must have a smartphone and the device.
+    \item To use the product correctly, the tester must have the right equipment. In this case, a smartphone and the device.
+    \item The tester must have a way of measure what the device needs to analyze the data, the tester has to know that the actions he or she is taking, are having an effect on the device’s needs. So the tester has to 
+        validate that all the processes are having an impact on the reports of all the information available.                                                                                                                
+\end{enumerate}
+
+\subsection{Restrictions}
+\begin{enumerate}
+    \item The tester shall test the device in different types of smartphones:
+    \item The device itself can only be connected to a smartphone, so the tester must try diferent types to make sure that the device works in each and everyone of them.
+    \item The tester cannot test the device under water.
+    \item The device is not waterproof. It can withstand a few drops of water, but cannot go underwater. The device has to be tested in a dry area.
+    \item The device will only work if it has battery.
+    \item The device can only power on to be tested if it has enough battery to function.
+    \item The device cannot be connected to a computer.
+    \item The device is only meant to work on smartphones so it can be more practical to the user.
+\end{enumerate}
+
+\section{Procedure List}
+\begin{enumerate}
+    \item Analysis
+    \item Review 
+    \item Test
+    \item Checkout
+\end{enumerate}
+
+\chapter{Test procedures}
+\section{Procedure Identifiers}
+\begin{enumerate}
+    \item PP001 Analysis
+    \item PP002 Review
+    \item PP003 Test
+    \item PP004 Checkout
+\end{enumerate}
+
+\section{Objectives}
+\begin{enumerate}
+    \item \textbf{PP001 Analysis:} determine the procedures and the material needed to do the tests properly
+    \item \textbf{PP002 Review:} check that we have all that's needed to make the tests.
+    \item \textbf{PP003 Test:} do all the established tests.
+    \item \textbf{PP004 Checkout:} all the tests are done correctly
+\end{enumerate}
+
+\section{Initial Instructions}
+\begin{enumerate}
+    \item Establish all that procedures and materials needed to do the tests properly.
+    \item Establish different inputs and combination of functions to use on the tests.
+    \item Determine a range of time to run the tests.
+    \item Establish the results that the product must accomplish
+    \item Create other tests to use after the initial test have been passed by the product.
+    \item Create a code to run the tests.
+\end{enumerate}
+
+\section{Test Cases}
+\subsection{Case Identifiers}
+\begin{itemize}
+    \item \textbf{CP001} Power On
+    \item \textbf{CP002} Power Off
+    \item \textbf{CP003} Shutdown Alarm
+    \item \textbf{CP004} Manual Dose Administration
+    \item \textbf{CP005} Replace Insulin Cartridge
+    \item \textbf{CP006} Request SOS
+    \item \textbf{CP007} Request Logs
+    \item \textbf{CP008} Lock device Configuration
+    \item \textbf{CP009} Configure Device
+    \item \textbf{CP010} Configure Device Remotely
+\end{itemize}
+
+\subsection{Case Objectives}
+\begin{itemize}
+    \item \textbf{CP001} Power On:  “Turn on the device”
+    \item \textbf{CP002} Power Off: “Turn off the device”
+    \item \textbf{CP003} Shutdown Alarm: “Turn off the alarm”
+    \item \textbf{CP004} Manual Dose Administration: “Administer insulin manually”
+    \item \textbf{CP005} Replace Insulin Cartridge: “Change the Cartridge”
+    \item \textbf{CP006} Request SOS: “Emergency Call”
+    \item \textbf{CP007} Request Logs: “Login to your account”
+    \item \textbf{CP008} Lock device Configuration “Save and lock configuration”
+    \item \textbf{CP009} Configure Device: “Register general information”
+    \item \textbf{CP010} Configure Device Remotely:  “Access the device remotely”
+\end{itemize}
+
+\subsection{Preconditions}
+\begin{enumerate}
+    \item \textbf{CP001} Power On: The device must have a charged battery.
+    \item \textbf{CP002} Power Off: No alarm must be activated.
+    \item \textbf{CP003} Shutdown Alarm: The reason why the alarm was activated must have been dealt with.
+    \item \textbf{CP004} Manual Dose Administration: The user must have the permission access by the doctor in the device to administer the dose manually.
+    \item \textbf{CP005} Replace Insulin Cartridge: The cartridge must be empty.
+    \item \textbf{CP006} Request SOS: The user has click on the “Request SOS” button or an alarm has been activated for a long period of time.
+    \item \textbf{CP007} Request Logs: The device is on and the user clicks on the option “Request Logs”
+    \item \textbf{CP008} Lock device Configuration: The user or doctor clicks on the “Lock button” 
+    \item \textbf{CP009} Configure Device: To user chooses to change a device setting and clicks on the configure device button, the lock device must not be activated.
+    \item \textbf{CP010} Configure Device Remotely: The user acesses the device through another device,, the lock device must not be activated.
+\end{enumerate}
+
+\subsection{Inputs}
+\begin{enumerate}
+    \item \textbf{CP001} Power On: Turn on the insulin pump and the mobile device
+    \item \textbf{CP002} Power Off: Turn off the insulin pump and then the mobile device (for saving the data)
+    \item \textbf{CP003} Shutdown Alarm: Click on the notification to shut it down.
+    \item \textbf{CP004} Manual Dose Administration: Enter to the menu, select “Dose administration”, select the option “Manual dose administration”, and indicate the amount to inject. 
+    \item \textbf{CP005} Replace Insulin Cartridge: Enter to the menu, select “Dose administration”, select the option “replace insulin cartridge”, and remove the cartridge from the insulin pump.
+    \item \textbf{CP006} Request SOS: Enter to the menu, select “help”, select “request SOS”, and confirm your information.
+    \item \textbf{CP007} Request Logs: Enter to the menu, select “Request Logs”, select the areas to be downloaded, and confirm the download. 
+    \item \textbf{CP008} Lock device Configuration: Enter to the menu, select “Patient configuration”, chose a patient, select “Lock device configuration”, adjust the parameters, and confirm.
+    \item \textbf{CP009} Configure Device: Enter the menu, select “Configuration”, adjust the parameters, and confirm changes.
+    \item \textbf{CP010} Configure Device Remotely: Enter the menu, select “Patient configuration”, adjust the parameters, and confirm.
+\end{enumerate}
+
+\subsection{Expected Results}
+\begin{enumerate}
+    \item \textbf{CP001} Power On: Connect correctly to the database of the user.
+    \item \textbf{CP002} Power Off: Save all the information registred while functioning.
+    \item \textbf{CP003} Shutdown Alarm: Stop the alarm from ringing.
+    \item \textbf{CP004} Manual Dose Administration: Supply the amount desired.
+    \item \textbf{CP005} Replace Insulin Cartridge: Allow the user to remove the insulin cartridge.
+    \item \textbf{CP006} Request SOS: Send the actual information and location of the user to the hospital.
+    \item \textbf{CP007} Request Logs: Transfer the information from the device to all the destination required.
+    \item \textbf{CP008} Lock device Configuration: Stop the user from been able to configure the device and changing any parameter. It also will update the parameters according to the doctor’s solicitation.
+    \item \textbf{CP009} Configure Device: Update the device configuration according to the patient.
+    \item \textbf{CP010} Configure Device Remotely: Update the device configuration according to the doctor.
+\end{enumerate}
+ 
+\subsection{Final Instructions}
+At the end of all the use cases and processes, it is important to have a way of returning to the main interface. And the process is simple. After changing anything on the platform or information, a button will appear at 
+the end of that interface showing “Save changes”. When you press that button, automatically you will be redirected to the main interface where the user will continue his or her experience with the device.
+
+\chapter{Special Thanks}
+Thanks to Jean-Philippe Eisenbarth, Yiannis Lazarides and Karl Wiegers for their templates, both in general (IEEE template) and in \LaTeX code. We'd also like to thank the Object Management Group, for providing the
+blueprints towards a comprehensible discipline in the form of their UML standard.
+
+
+
+%\section{References}
+\bibliographystyle{apacite}
+\bibliography{final}
+
+\glsaddallunused
+\printglossaries
+
+\chapter{Conclusiones [sic]}
+\section{Federico}
+Un semestre hemos estado trabajando ya con diferentes formatos y herramientas de documentación para el desarrollo del software, y por mucho que el programador que llevo dentro se niegue a querer documentar y niegue la 
+necesidad de documentación completa, me han probado una y otra vez lo contrario. Salgo de este curso estando consciente de que la documentación no es una necedad ni mucho menos, es una necesidad.
+Incluso en mi área de trabajo logre ver aplicado los problemas que causan la falta de documentación apropiada y aunque a mí personalmente siga sin gustarme documentar, lo voy a hacer porque ahora sé lo importante que 
+es, tanto para mí como para mi equipo de trabajo e incluso cualquier persona que llegue a darle mantenimiento al sistema e incluso el usuario o cliente.
+Sirve como registro de lo hecho, un recordatorio siempre presente de los objetivos, de lo que se tiene que hacer y de cómo debe funcionar. Un documento que deje claro a quien lo vea como está pensado, como está 
+diseñado, cuáles son las funcionalidades, que requerimientos cumple y como lleva a cabo el propósito para el cumplimiento de las necesidades del cliente. Al final el simple hecho de tener estos documentos otorga una 
+formalidad que queda como compromiso y protección.
+
+\section{Alejandra}
+Personalmente la materia de “Ingeniería de Software” se enfoco en lo que fue en el aprendizaje de las herramientas y conocimiento necesario para la realización del proyecto final. Con el proyecto final logramos aprender 
+hacer casos de uso, restricciones, precondiciones, diagramas de flujo, etc. Pienso personalmente que todo este aprendizaje es de suma importancia para nuestras futuras materias que se enfoquen en el área de diseño y 
+desarrollo de software. Así mismo antes de esta materia no comprendía la importancia de la documentación y sobre como lo que se hace y lo que quiere el cliente puede llegar a ser muy diferente por la exactitud con las 
+que se establecieron inicialmente los requerimientos. Con el proyecto final aprendi como el desarrollo de software es mucho más complicado que algunos pensarían, ya que se debe pensar en todas las posibles fallas que 
+podría tener el sistema y sobre sus soluciones o caminos alternos a tomar.
+
+\section{David}
+A lo largo de curso aprendí los diferentes procedimientos que se hay que seguir para hacer el proceso de ingeniera al momento de realizar un software. Comprendí a cerca de los diferentes estándares que se deben de 
+seguir para la documentación de un proyecto de programación para orientar correctamente tanto a los desarrolladores como al cliente, por lo cual es necesario la inclusión de varias formas de especificaciones, diseño y 
+pruebas para dejar en claro el propósito del proyecto y la manera en la que se va a implementar.
+
+\section{Fernando}
+El desarrollo de software es lo que va a impulsar al mundo entero, estamos a pocos pasos de dar un salto enorme en la manera en que vivimos e interactuamos con la tecnología. Cuando se trata de impulsar grupos por medio 
+de aplicaciones, plataformas o dispositivos la mayoría de la gente ve solo algo programable, pero no se dan cuenta que para crear estos sistemas se requiere de un excelente equipo en la documentación, ya que sin este, 
+no hay ideas concretas. La clave de un software exitoso es tener un excelente equipo distribuído en diferentes áreas con un gran énfasis en la documentación y una comunicación efectiva. En este curso aprendí lo vital 
+que es la documentación al igual de cómo generarlo. Cada vez entiendo más acerca de cómo es que se hacen los procesos de ingeniería de software y la verdad es que le agarré sabor. Es algo hermoso y también tedioso, pero 
+es algo súmamente importante.
+
+\section{Daniela}
+La sección de requerimientos, el diseño, y el documento de pruebas son fundamentales para la ingeniería de software de cualquier proyecto del área. Incluso se pueden extraer los conceptos para aplicarlos en otros 
+ámbitos. Son tan importantes porque cada sección tiene su relevancia, y todo se vuelve gradual, uno construye a partir de lo que tiene de manera cronológica. La definición de requerimientos con el cliente tiene que 
+quedar hecha claramente para evitar problemas al generar propuestas de diseño, y esto tiene que quedar bien claro y casi a prueba de balas para seguir con las pruebas, y así poder implementarlo. Cada paso debe ser 
+analizado con detalle, sin agregar información innecesaria y al mismo tiempo sin omitir documentación crucial para el desarrollo del proyecto. De esta manera, se evitan los errores más delante a la hora de 
+implementación y prueba que resultan más costosos con trabajo prácticamente desperdiciado, volviendo el proceso de desarrollo de software más eficiente y efectivo.
+
+\section{Ricardo}
+Como mencion\'{e} en clase, esta es una experiencia nueva para mí. Mi inter\'{e}s por la Ciencia Computacional comenzó a partir de la “cultura hacker” incipiente de los 70's y 80's. Prácticamente, surgió de entender por
+qu\'{e} mi computadora funciona de la manera que funciona. En otras palabras, era algo personal. Nunca me he visto en una situación en la que tenga que producir “software” \textsl{per se}. Esto tiene una serie de 
+implicaciones de entre las cuales la más notable es que todo lo que hago es bajo mis reglas. En este caso, tuve que aprender sobre las “reglas” de otros, y tuve que conciliar mis ideas con las de otros, poni\'{e}ndolas
+en tela de juicio; especialmente porque el sistema aquí descrito es crítico: no es de ocio o algo sin consecuencias.\\
+
+Definitivamente fue un proceso incómodo porque tuve que reevaluar la manera en que hago las cosas, y tratar de romper hábitos. Pero creo que eso me ha enseñado, más allá de los símbolos y las nomenclaturas y demás 
+“trámites”, sobre la disciplina necesaria para comunicar ideas de software y aspirar a trabajar en algo con calidad. Como se supondría de mi predilección por muchas tecnologías de antaño, en realidad lo que me llama la
+atención de ellas no es la cosa en sí, sino el concepto de que las buenas ideas perduran. Aunque existan muchas tendencias hoy en día, y aunque el mundo se mueva con semejante rapidez, todavía es patente que sólo las
+ideas verdaderamente fundamentadas perduran. No pretendemos sugerir que nuestra idea est\'{e} a ese nivel. Pero se tiene que comenzar por algo.\\
+
+Por último (pero no por ello menos importante), me sirvió como práctica de \LaTeX. Todavía me falta mucho por aprender, pero es un buen
+comienzo.
+
+
+\end{document}
